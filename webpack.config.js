@@ -3,7 +3,10 @@ import path from 'path';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 
 module.exports = {
-    entry: path.join(__dirname,'src','index.js'),
+    entry: [
+        '@babel/polyfill',
+        path.join(__dirname,'src','index.js')
+    ],
     output: {
         path: path.join(__dirname,'build'),
         filename: 'index.bundle.js'
@@ -42,6 +45,6 @@ module.exports = {
     plugins: [
         new HtmlWebpackPlugin({
             template: path.join(__dirname,'src','index.html')
-        })
+        }),
     ]
 };
