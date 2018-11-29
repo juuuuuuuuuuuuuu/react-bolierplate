@@ -52,7 +52,7 @@ class ExampleAsync2 extends Component {
 
     makerequest2 = async() => {
         try {
-            JSON.parse(await this.getJSON('a'))
+            JSON.parse(await this.getJSON(null))
         } catch (err) {
             console.log("Err", err)
         }
@@ -115,34 +115,80 @@ class ExampleAsync2 extends Component {
     }
 
     callAPromise = () => {
-            return new Promise((resolve, reject) => {
-                 resolve()
-            })
+        return new Promise((resolve, reject) => {
+            resolve()
+        })
     }
 
 
+     job = (x) => {
+        return new Promise((resolve, reject) => {
+        setTimeout(() => {
+            // console.log("x", x)
+            resolve(x);
+        }, x * 1000);
+    })
+    }
 
-render() {
-    // this.makerequest();
-    // this.makerequest2();
-    this.makeRequest5()
-        .catch(err => {
-            console.log(1, err);
-            // output
-            // Error: oops at callAPromise.then.then.then.then.then (index.js:8:13)
-        })
-    this.makeRequest6()
-        .catch(err => {
-            console.log(2, err);
-            // output
-            // Error: oops at callAPromise.then.then.then.then.then (index.js:8:13)
-        })
-    return (
-        <div>
-            <input onKeyUp={this.handleDebounce}></input>
-        </div>
-    );
-}
+    timeStamp = async() => {
+        try {
+            const [a, b, c] = await Promise.all([this.job(3), this.job(6), this.job(9)]);
+            console.log("###", a,b,c)
+            // const c = await this.job(6);
+            return a + b + c;
+        } catch(err) {
+            console.log(err)
+        }
+    }
+
+    timeStamp2 = async() => {
+        const promises = [6, 9, 3].map((timer) => (
+            new Promise((res, req) => {
+                setTimeout(() => res(timer), timer * 100);
+            })
+        ))
+
+        for await (const result of promises) {
+            console.log("RR",  result);
+        }
+
+    }
+
+    timeStamp3 = async() => {
+        try {
+         for (const result of await Promise.all([this.job(3), this.job(6), this.job(9)])) {
+             console.log(result)
+         }
+        } catch(err) {
+            console.log(err)
+        }
+    }
+
+
+    render() {
+        this.makerequest();
+        this.makerequest2();
+        // console.log("tt", this.timeStamp())
+        // this.timeStamp2();
+        // this.timeStamp3();
+        // this.makeRequest5()
+        //     .catch(err => {
+        //         console.log(1, err);
+        //         // output
+        //         // Error: oops at callAPromise.then.then.then.then.then (index.js:8:13)
+        //     })
+        // this.makeRequest6()
+        //     .catch(err => {
+        //         console.log(2, err);
+        //         // output
+        //         // Error: oops at callAPromise.then.then.then.then.then (index.js:8:13)
+        //     })
+        return (
+            <div>
+                <input onKeyUp={this.handleDebounce}></input>
+            </div>
+        );
+    }
 }
 
 

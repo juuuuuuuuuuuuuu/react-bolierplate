@@ -34,6 +34,7 @@ class ExampleAsyncAwait extends Component {
         //async로 간단한 소스
         async function generator2() {
             const users = await getUser();
+            const user2 = await getTest();
             console.log("uuu", users)
             return users;
         }

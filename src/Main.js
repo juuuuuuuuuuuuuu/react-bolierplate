@@ -5,6 +5,7 @@ import ExampleIterator from './ExampleIterator';
 import ExampleAsyncAwait from './ExampleAsyncAwait';
 import ExampleAsync2 from "./ExampleAsync2";
 import ExampleCloser from "./ExampleCloser";
+import ExampleFinally from "./ExampleFinally";
 // import "@babel/polyfill"; //genterator사용하려고 임포트함  https://stackoverflow.com/questions/49253746/error-regeneratorruntime-is-not-defined-with-babel-7
                           //https://esausilva.com/2017/07/11/uncaught-referenceerror-regeneratorruntime-is-not-defined-two-solutions/
 //위에꺼 다 필요 없음 https://www.zerocho.com/category/ECMAScript/post/57a830cfa1d6971500059d5a
@@ -20,8 +21,9 @@ class Main extends React.Component {
                 {/*<ExamplePromise/>*/}
                 {/*<ExampleIterator/>*/}
                 {/*<ExampleAsyncAwait/>*/}
-                {/*<ExampleAsync2/>*/}
-                <ExampleCloser/>
+                <ExampleAsync2/>
+                {/*<ExampleCloser/>*/}
+                {/*<ExampleFinally/>*/}
             </React.Fragment>
         )
     }
