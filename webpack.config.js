@@ -1,15 +1,18 @@
 import path from 'path';
-
+import webpack from 'webpack';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 
 module.exports = {
-    entry: [
-        '@babel/polyfill',
-        path.join(__dirname,'src','index.js')
-    ],
+    entry: {
+        vendor: [
+            '@babel/polyfill',
+        ],
+        app: [path.join(__dirname, 'src', 'index.js')]
+    },
     output: {
         path: path.join(__dirname,'build'),
-        filename: 'index.bundle.js'
+        filename: 'static/js/[name].[hash].js',
+        chunkFilename: "static/js/[name].[chunkhash].chunk.js"
     },
     mode: process.env.NODE_ENV || 'development',
     resolve: {
@@ -46,5 +49,9 @@ module.exports = {
         new HtmlWebpackPlugin({
             template: path.join(__dirname,'src','index.html')
         }),
-    ]
+    ],
+    optimization: {
+        runtimeChunk: true,
+        splitChunks: { chunks: 'all' },
+    },
 };
