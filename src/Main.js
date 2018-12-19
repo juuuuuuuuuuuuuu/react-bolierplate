@@ -11,6 +11,9 @@ import ExampleFinally from "./ExampleFinally";
 //위에꺼 다 필요 없음 https://www.zerocho.com/category/ECMAScript/post/57a830cfa1d6971500059d5a
 // import Generator from './Generator';
 // import AsyncAwait from './AsyncAwait';
+import ExampleCodeSplitting from './ExampleCodeSplitting';
+import ExamplePortal from './ExamplePortal';
+import ExampleState from "./ExampleState";
 
 class Main extends React.Component {
     render() { //  return 배열은 가능, 각각의 독립적인 element는 감싸야함
@@ -21,9 +24,12 @@ class Main extends React.Component {
                 {/*<ExamplePromise/>*/}
                 {/*<ExampleIterator/>*/}
                 {/*<ExampleAsyncAwait/>*/}
-                <ExampleAsync2/>
+                {/*<ExampleAsync2/>*/}
                 {/*<ExampleCloser/>*/}
                 {/*<ExampleFinally/>*/}
+                {/*<ExampleCodeSplitting/>*/}
+                {/*<ExamplePortal/>*/}
+                <ExampleState/>
             </React.Fragment>
         )
     }
