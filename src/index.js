@@ -10,5 +10,5 @@ import Main from './Main';
 
 ReactDOM.render(
     <Main/>,
-    document.getElementById("root")
+    document.getElementById("timeline-embed")
 );
