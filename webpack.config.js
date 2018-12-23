@@ -39,7 +39,18 @@ module.exports = {
             {
                 test: /\.(jpg|jpeg|png|gif|mp3|svg)$/,
                 loaders: ['file-loader']
-            }
+            },
+            {
+                test: /\.(eot|svg|ttf|woff|woff2)$/,
+                loader: 'file-loader?name=public/fonts/[name].[ext]'
+            },
+            {
+                test: /\.(gif|png|jpe?g|svg)$/i,
+                loaders: [
+                    'file-loader?hash=sha512&digest=hex&name=[hash].[ext]',
+                    'image-webpack-loader'
+                ]
+            },
         ]
     },
     plugins: [
