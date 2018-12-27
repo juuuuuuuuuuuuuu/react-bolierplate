@@ -15,7 +15,6 @@
 	TL
 */
 (function (root) {
-    console.log("root", root)
     TL = {
         // root.TL = {
         VERSION: '0.1',
@@ -2555,8 +2554,6 @@ TL.Events.fire = TL.Events.fireEvent;
         gecko3d = 'MozPerspective' in doc.style,
         opera3d = 'OTransition' in doc.style,
         opera = window.opera;
-    console.log("doc", document.documentElement)
-
 
     var retina = 'devicePixelRatio' in window && window.devicePixelRatio > 1;
 
@@ -6728,19 +6725,41 @@ TL.MenuBar = TL.Class.extend({
     /*	Private Methods
 	================================================== */
     _initLayout: function () {
-
         // Create Layout
-        this._el.button_zoomin 							= TL.Dom.create('span', 'tl-menubar-button', this._el.container);
-        this._el.button_zoomout 						= TL.Dom.create('span', 'tl-menubar-button', this._el.container);
-        this._el.button_backtostart 					= TL.Dom.create('span', 'tl-menubar-button', this._el.container);
+        if (TL.customOptions.menuBar.zoomIn) {
+            this._el.button_zoomin 							= TL.Dom.create('span', 'tl-menubar-button', this._el.container);
+            this._el.button_zoomin.innerHTML			= "<span class='tl-icon-zoom-in'></span>";
+        }
+        if (TL.customOptions.menuBar.zoomOut) {
+            this._el.button_zoomout 						= TL.Dom.create('span', 'tl-menubar-button', this._el.container);
+            this._el.button_zoomout.innerHTML			= "<span class='tl-icon-zoom-out'></span>";
+        }
+
+        if (TL.customOptions.menuBar.reset) {
+            this._el.button_backtostart 					= TL.Dom.create('span', 'tl-menubar-button', this._el.container);
+            this._el.button_backtostart.innerHTML		= "<span class='tl-icon-goback'></span>";
+        }
 
         if (TL.Browser.mobile) {
             this._el.container.setAttribute("ontouchstart"," ");
         }
 
-        this._el.button_backtostart.innerHTML		= "<span class='tl-icon-goback'></span>";
-        this._el.button_zoomin.innerHTML			= "<span class='tl-icon-zoom-in'></span>";
-        this._el.button_zoomout.innerHTML			= "<span class='tl-icon-zoom-out'></span>";
+        if (TL.customOptions.menuBarStyle) {
+            if (TL.customOptions.menuBarStyle.zoomInIcon) {
+                const styleSheet = document.head.appendChild(document.createElement("style"));
+                styleSheet.innerHTML = '.tl-icon-zoom-in:after {font-family: FontAwesome; content: "' + TL.customOptions.menuBarStyle.zoomInIcon + '"!important; }';
+            }
+            if (TL.customOptions.menuBarStyle.zoomOutIcon) {
+                const styleSheet = document.head.appendChild(document.createElement("style"));
+                styleSheet.innerHTML = '.tl-icon-zoom-out:after {font-family: FontAwesome; content: "' + TL.customOptions.menuBarStyle.zoomOutIcon + '"!important; }';
+            }
+            if (TL.customOptions.menuBarStyle.resetIcon) {
+                const styleSheet = document.head.appendChild(document.createElement("style"));
+                styleSheet.innerHTML = '.tl-icon-goback:after {font-family: FontAwesome; content: "' + TL.customOptions.menuBarStyle.resetIcon + '"!important; }';
+            }
+        }
+
+
 
 
     },
@@ -6833,12 +6852,15 @@ TL.Message = TL.Class.extend({
     },
 
     _updateMessage: function(t) {
-        if (!t) {
-            this._el.message.innerHTML = this._('loading');
+        if (TL.customOptions.sliderStyle.loadingContent) {
+            this._el.message.innerHTML = TL.customOptions.sliderStyle.loadingContent;
         } else {
-            this._el.message.innerHTML = t;
+            if (!t) {
+                this._el.message.innerHTML = this._('loading');
+            } else {
+                this._el.message.innerHTML = t;
+            }
         }
-
         // Re-add to DOM?
         if(!this._el.parent.atrributes && this._add_to_container.attributes) {
             this._add_to_container.appendChild(this._el.container);
@@ -6867,6 +6889,9 @@ TL.Message = TL.Class.extend({
         // Create Layout
         this._el.message_container = TL.Dom.create("div", "tl-message-container", this._el.container);
         this._el.loading_icon = TL.Dom.create("div", this.options.message_icon_class, this._el.message_container);
+        if (TL.customOptions.sliderStyle.loadingStyle) {
+            this._el.loading_icon.setAttribute('style', TL.customOptions.sliderStyle.loadingStyle);
+        }
         this._el.message = TL.Dom.create("div", "tl-message-content", this._el.message_container);
 
         this._updateMessage();
@@ -7386,7 +7411,6 @@ TL.Media = TL.Class.extend({
         if (this.data.caption && this.data.caption != "") {
             this._el.caption				= TL.Dom.create("div", "tl-caption", this._el.content_container);
             this._el.caption.innerHTML		= this.options.autolink == true ? TL.Util.linkify(this.data.caption) : this.data.caption;
-            console.log("Caption", this._el.caption.innerHTML)
             this.options.caption_height 	= this._el.caption.offsetHeight;
         }
 
@@ -7983,7 +8007,6 @@ TL.Media.Image = TL.Media.extend({
 
         this._el.content_item				= TL.Dom.create("img", image_class, this._el.content);
         if (TL.customOptions.sliderStyle && TL.customOptions.sliderStyle.mediaImageStyle) {
-            console.log("#$#$#$#$", this._el.content_item)
             this._el.content_item.setAttribute('style', TL.customOptions.sliderStyle.mediaImageStyle)
         }
 
@@ -9045,7 +9068,6 @@ TL.Media.TwitterEmbed = TL.Media.extend({
 
         //	TWEET CONTENT
         tweet_text 			= d.html.split("<\/p>\&mdash;")[0] + "</p></blockquote>";
-        console.log(tweet_text);
         tweetuser			= d.author_url.split("twitter.com\/")[1];
         tweet_status_temp 	= d.html.split("<\/p>\&mdash;")[1].split("<a href=\"")[1];
         tweet_status_url 	= tweet_status_temp.split("\"\>")[0];
@@ -10278,6 +10300,8 @@ TL.SlideNav = TL.Class.extend({
             this._el.description = TL.Dom.create("div", "tl-slidenav-description", this._el.content_container);
         }
 
+
+
         // if (TL.customOptions.sliderStyle && TL.customOptions.sliderStyle.navIcon) {
         //     const styleNavLeft = document.head.appendChild(document.createElement("style"));
         //     const styleNavRight = document.head.appendChild(document.createElement("style"));
@@ -10327,7 +10351,6 @@ TL.StorySlider = TL.Class.extend({
     /*	Private Methods
 	================================================== */
     initialize: function (elem, data, options, init) {
-        console.log("init", init, options)
         // DOM ELEMENTS
         this._el = {
             container: {},
@@ -10722,7 +10745,6 @@ TL.StorySlider = TL.Class.extend({
 
 
         // Update Size
-        console.log("offwidth, height", this._el.container.offsetWidth, this._el.container.offsetHeight)
         this.options.width = this._el.container.offsetWidth;
         this.options.height = this._el.container.offsetHeight;
 
@@ -10914,7 +10936,6 @@ TL.TimeNav = TL.Class.extend({
             marker_width_min: 		100, 			// Minimum Marker Width
             zoom_sequence:          [0.5, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89] // Array of Fibonacci numbers for TimeNav zoom levels http://www.maths.surrey.ac.uk/hosted-sites/R.Knott/Fibonacci/fibtable.html
         };
-        console.log("ini", this.options.height)
         // Animation
         this.animator = null;
 
@@ -11163,7 +11184,6 @@ TL.TimeNav = TL.Class.extend({
     },
 
     _calculateAvailableHeight: function() {
-        console.log("this.options", this.options.height, this._el.timeaxis_background.offsetHeight, this.options.marker_padding) // d여기 부분을 잡아야함!!!!!!!@@@@@#####################
         return (this.options.height - this._el.timeaxis_background.offsetHeight - (this.options.marker_padding));
     },
 
@@ -11196,7 +11216,6 @@ TL.TimeNav = TL.Class.extend({
             var remainder_height = available_height - marker_y + this.options.marker_padding;
             this._markers[i].setRowPosition(marker_y, remainder_height);
         };
-
     },
 
     _resetMarkersActive: function() {
@@ -11439,7 +11458,6 @@ TL.TimeNav = TL.Class.extend({
         if (width) {
             this.options.width = width;
         }
-        console.log("updateheight", this.options.height)
         if (height && height != this.options.height) {
             this.options.height = height;
             this.timescale = this._getTimeScale();
@@ -11529,6 +11547,9 @@ TL.TimeNav = TL.Class.extend({
         this._el.timeaxis 					= TL.Dom.create('div', 'tl-timeaxis', this._el.slider);
         this._el.timeaxis_background 		= TL.Dom.create('div', 'tl-timeaxis-background', this._el.container);
 
+        if (TL.customOptions.timeNavStyle.timeAxisStyle) {
+            this._el.timeaxis_background.setAttribute('style', TL.customOptions.timeNavStyle.timeAxisStyle);
+        }
 
         // Knight Lab Logo
         // this._el.attribution.innerHTML = "<a href='http://timeline.knightlab.com' target='_blank'><span class='tl-knightlab-logo'></span>Timeline JS</a>"
@@ -11733,7 +11754,7 @@ TL.TimeMarker = TL.Class.extend({
         var text_line_height = 12,
             text_lines = 1;
 
-        this._el.content_container.style.height = h  + "px";
+        this._el.content_container.style.height = h  + "px"; //timeline박스 하나의 크기
         this._el.timespan_content.style.height = h + "px";
         // Handle Line height for better display of text
         if (h <= 30) {
@@ -11765,6 +11786,9 @@ TL.TimeMarker = TL.Class.extend({
             }
             this._text.style.height = (text_lines * text_line_height)  + "px";
         }
+        // if (TL.customOptions.timeNavStyle.contentStyle) {
+        //     this._text.setAttribute('style', TL.customOptions.timeNavStyle.contentStyle);
+        // }
     },
 
     setWidth: function(w) {
@@ -11819,6 +11843,15 @@ TL.TimeMarker = TL.Class.extend({
         this._el.timespan				= TL.Dom.create("div", "tl-timemarker-timespan", this._el.container);
         this._el.timespan_content		= TL.Dom.create("div", "tl-timemarker-timespan-content", this._el.timespan);
         this._el.content_container		= TL.Dom.create("div", "tl-timemarker-content-container", this._el.container);
+
+
+        // if (TL.customOptions.timeNavStyle.timeSpan) {
+        //     this._el.timespan.setAttribute('style', TL.customOptions.timeNavStyle.timeSpan);
+        // }
+
+        if (TL.customOptions.timeNavStyle.contentStyle) {
+            this._el.content_container.setAttribute('style', TL.customOptions.timeNavStyle.contentStyle);
+        }
 
         this._el.content				= TL.Dom.create("div", "tl-timemarker-content", this._el.content_container);
 
@@ -12712,7 +12745,6 @@ TL.TimeAxis = TL.Class.extend({
     },
 
     drawTicks: function(timescale, optimal_tick_width) {
-
         var ticks = timescale.getTicks();
 
         var controls = {
@@ -12779,6 +12811,9 @@ TL.TimeAxis = TL.Class.extend({
                 var tick = TL.Dom.create("div", "tl-timeaxis-tick", tick_element),
                     tick_text 	= TL.Dom.create("span", "tl-timeaxis-tick-text tl-animate-opacity", tick);
 
+                if (TL.customOptions.timeNavStyle.fontColor) {
+                    tick_text.setAttribute('style', TL.customOptions.timeNavStyle.fontColor);
+                }
                 tick_text.innerHTML = ts_tick.getDisplayDate(this.getLanguage(), dateformat);
 
                 tick_elements.push({
@@ -13107,8 +13142,6 @@ TL.Timeline = TL.Class.extend({
     /*  Private Methods
 	================================================== */
     initialize: function (elem, data, options, customOptions) {
-        console.log("customOptions", customOptions)
-        // debugger;
         var self = this;
         if (!options) { options = {}};
         // Version
@@ -13195,6 +13228,43 @@ TL.Timeline = TL.Class.extend({
 
         // customOptions
         TL.customOptions = customOptions;
+        TL.customOptions  = {
+            className: {
+                sliderClass: customOptions.className && customOptions.className.sliderClass ? customOptions.className.sliderClass: '',
+                timenavClass: customOptions.className && customOptions.className.timenavClass ? customOptions.className.timenavClass : '',
+                menuBarClass:  customOptions.className && customOptions.className.menuBarClass ? customOptions.className.menuBarClass : '',
+            },
+            sliderStyle: {
+                rootStyle: customOptions.sliderStyle && customOptions.sliderStyle.rootStyle ? customOptions.sliderStyle.rootStyle:  '',
+                titleStyle: customOptions.sliderStyle && customOptions.sliderStyle.titleStyle ? customOptions.sliderStyle.titleStyle : '',
+                contentStyle: customOptions.sliderStyle && customOptions.sliderStyle.contentStyle ? customOptions.sliderStyle.contentStyle : '',
+                mediaBoxStyle: customOptions.sliderStyle && customOptions.sliderStyle.mediaBoxStyle ? customOptions.sliderStyle.mediaBoxStyle : '',
+                mediaImageStyle: customOptions.sliderStyle && customOptions.sliderStyle.mediaImageStyle ? customOptions.sliderStyle.mediaImageStyle : '',
+                navStyle: customOptions.sliderStyle && customOptions.sliderStyle.navStyle ? customOptions.sliderStyle.navStyle :  '',
+                navIcon: customOptions.sliderStyle && customOptions.sliderStyle.navIcon ? customOptions.sliderStyle.navIcon : '',
+                loadingStyle: customOptions.sliderStyle && customOptions.sliderStyle.loadingStyle ? customOptions.sliderStyle.loadingStyle : '',
+                loadingContent: customOptions.sliderStyle && customOptions.sliderStyle.loadingContent ? customOptions.sliderStyle.loadingContent : '',
+            },
+            timeNavStyle: {
+                rootStyle: customOptions.timeNavStyle && customOptions.timeNavStyle.rootStyle ? customOptions.timeNavStyle.rootStyle : '',
+                timeAxisStyle: customOptions.timeNavStyle && customOptions.timeNavStyle.timeAxisStyle ? customOptions.timeNavStyle.timeAxisStyle : '',
+                fontColor:  customOptions.timeNavStyle && customOptions.timeNavStyle.fontColor ? customOptions.timeNavStyle.fontColor : '',
+                contentStyle: customOptions.timeNavStyle && customOptions.timeNavStyle.contentStyle ? customOptions.timeNavStyle.contentStyle : '',
+                timeSpan: customOptions.timeNavStyle && customOptions.timeNavStyle.timeSpan ? customOptions.timeNavStyle.timeSpan : '',
+            },
+            menuBarStyle: { //메뉴바 아이콘 수정
+                rootStyle: customOptions.menuBarStyle && customOptions.menuBarStyle.rootStyle ? customOptions.menuBarStyle.rootStyle : '',
+                zoomInIcon: customOptions.menuBarStyle && customOptions.menuBarStyle.zoomInIcon ? customOptions.menuBarStyle.zoomInIcon : '',
+                zoomOutIcon: customOptions.menuBarStyle && customOptions.menuBarStyle.zoomOutIcon ? customOptions.menuBarStyle.zoomOutIcon : '',
+                resetIcon: customOptions.menuBarStyle && customOptions.menuBarStyle.resetIcon ? customOptions.menuBarStyle.resetIcon : '',
+            },
+            slideNav: customOptions.slideNav && false, // <>밑에  다음 내용이 나오는 것(  기본값: false)
+            menuBar: { //아이콘 안보이게 속성
+                zoomIn: customOptions.menuBar && customOptions.menuBar.zoomIn ?  customOptions.menuBar.zoomIn : true,
+                zoomOut: customOptions.menuBar && customOptions.menuBar.zoomOut ?  customOptions.menuBar.zoomOut : true,
+                reset: customOptions.menuBar && customOptions.menuBar.reset ?  customOptions.menuBar.reset : true,
+            }
+        };
 
         // Animation Objects
         this.animator_timenav = null;
@@ -13532,7 +13602,6 @@ TL.Timeline = TL.Class.extend({
         }
 
         // Set StorySlider Height
-        console.log("set",this.options.height , this.options.timenav_height)
         this.options.storyslider_height = (this.options.height - this.options.timenav_height);
 
         // Positon Menu
@@ -13562,19 +13631,14 @@ TL.Timeline = TL.Class.extend({
 			});
 			*/
 
-            //이부분 추가검토가 필요함
-            // if (TL.customOptions.timeNavStyle && TL.customOptions.timeNavStyle.rootStyle) {
-            // this._el.timenav.setAttribute('style', TL.customOptions.timeNavStyle.rootStyle)
-            // } else {
             this._el.timenav.style.height = Math.ceil(this.options.timenav_height) + "px";
-            // }
+
 
 
             // Animate StorySlider
             if (this.animator_storyslider) {
                 this.animator_storyslider.stop();
             }
-            console.log("this.options.storyslider_height", this.options.storyslider_height)
             this.animator_storyslider = TL.Animate(this._el.storyslider, {
                 height:   this.options.storyslider_height + "px",
                 duration:   duration/2,
@@ -13704,7 +13768,15 @@ TL.Timeline = TL.Class.extend({
             this._el.timenav		= TL.Dom.create('div', options && options.timenavClass ? options.timenavClass : 'tl-timenav', this._el.container);
         }
 
+        if (TL.customOptions.timeNavStyle.rootStyle) {
+            this._el.timenav.setAttribute('style', TL.customOptions.timeNavStyle.rootStyle);
+        }
+
         this._el.menubar			= TL.Dom.create('div', options && options.menuBarClass ? options.menuBarClass : 'tl-menubar', this._el.container);
+
+        if (TL.customOptions.menuBarStyle.rootStyle) {
+            this._el.menubar.setAttribute('style', TL.customOptions.menuBarStyle.rootStyle);
+        }
 
         // Initial Default Layout
         this.options.width        = this._el.container.offsetWidth;
@@ -13737,10 +13809,8 @@ TL.Timeline = TL.Class.extend({
 
         // LAYOUT
         if (this.options.layout == "portrait") {
-            console.log(1, this.options.height, this.options.timenav_height)
             this.options.storyslider_height = (this.options.height - this.options.timenav_height - 1);
         } else {
-            console.log(2, this.options.height)
             this.options.storyslider_height = (this.options.height - 1);
         }
 

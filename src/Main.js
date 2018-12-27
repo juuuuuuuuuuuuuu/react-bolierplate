@@ -14,6 +14,7 @@ class Main extends React.Component {
                 timenav_height: 250, //아래 시간축 height
                 // zoom_sequence: 2, // 이 속성 사용시 확대,축소기능  불가능
                 marker_height_min: 50, // 아래 뜨는거 팝업 height 크기
+                // optimal_tick_width: 500,
             }
 
             const custom = {
@@ -30,11 +31,33 @@ class Main extends React.Component {
                     mediaImageStyle: 'width: 100%; border: 0px solid red',
                     navStyle: 'color: gray;',
                     navIcon: ["\\f083", "\\f095"], //  왼쪽, 오른쪽 아이콘 (fontawesome에서 찾아서...)
+                    loadingStyle: 'background-image: url(timeline3/css/img/loading.gif); background-repeat: no-repeat, repeat; background-color: transparent;',
+                    loadingContent: '로딩중 입니다.'
                 },
                 timeNavStyle: {
-                    rootStyle: 'background-color: gray;height: 400px;',
+                    // rootStyle: 'background-color: red;height: 400px;',
+                    // timeAxisStyle: 'background-color: blue;',
+                    // fontColor: 'color: black',
+                    contentStyle: 'background-color: red; color: blue; border: 2px solid black;',
+                    timeSpan: 'border: 1px solid black',
+                },
+                menuBarStyle: { //메뉴바 아이콘 수정
+                    // rootStyle: 'background-color: yellow;',
+                    // zoomInIcon: "\\f083",
+                    // zoomOutIcon: "\\f083",
+                    // resetIcon: "\\f083",
                 },
                 slideNav: false, // <>밑에  다음 내용이 나오는 것(  기본값: false)
+                // menuBar: { //아이콘 안보이게 속성
+                //     zoomIn: true,
+                //     zoomOut: true,
+                //     reset: false,
+                // }
+
+                //timenav에서 시간축 배열 길이 지정,,,할 수 있도록
+                //간격이나 이런것도 --> 이러면 확대, 축소 못하나..? (로직확인해보기)
+                //timeline색상 변경 가능한지
+
             }
 
             timeline = new TL.Timeline('timeline', examples, additionalOptions, custom);
