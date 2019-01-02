@@ -50,8 +50,9 @@
     "babel-runtime": "^6.26.0",
     "image-webpack-loader": "^4.6.0",
     "lodash.debounce": "^4.0.8",
+    "luna-rocket": "git+http://git.duzon.com/ui/npm-luna-rocket.git#1.2.0",
     "react": "16.5.1",
     "react-dom": "16.5.1",
-    "luna-rocket": "git+http://git.duzon.com/ui/npm-luna-rocket.git#1.2.0"
+    "react-event-listener": "^0.6.5"
   }
 }

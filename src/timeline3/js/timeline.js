@@ -4892,6 +4892,9 @@ TL.Dom = {
     create: function(tagName, className, container) {
         var el = document.createElement(tagName);
         el.className = className;
+        // if (id) {
+        //     el.id = id;
+        // }
         if (container) {
             container.appendChild(el);
         }
@@ -6728,16 +6731,16 @@ TL.MenuBar = TL.Class.extend({
         // Create Layout
         if (TL.customOptions.menuBar.zoomIn) {
             this._el.button_zoomin 							= TL.Dom.create('span', 'tl-menubar-button', this._el.container);
-            this._el.button_zoomin.innerHTML			= "<span class='tl-icon-zoom-in'></span>";
+            this._el.button_zoomin.innerHTML			= "<span class='tl-icon-zoom-in' id='zoomIn'></span>";
         }
         if (TL.customOptions.menuBar.zoomOut) {
             this._el.button_zoomout 						= TL.Dom.create('span', 'tl-menubar-button', this._el.container);
-            this._el.button_zoomout.innerHTML			= "<span class='tl-icon-zoom-out'></span>";
+            this._el.button_zoomout.innerHTML			= "<span class='tl-icon-zoom-out' id='zoomOut'></span>";
         }
 
         if (TL.customOptions.menuBar.reset) {
             this._el.button_backtostart 					= TL.Dom.create('span', 'tl-menubar-button', this._el.container);
-            this._el.button_backtostart.innerHTML		= "<span class='tl-icon-goback'></span>";
+            this._el.button_backtostart.innerHTML		= "<span class='tl-icon-goback' id='reset'></span>";
         }
 
         if (TL.Browser.mobile) {
@@ -8811,13 +8814,13 @@ TL.Media.Text = TL.Class.extend({
             if (this.options.title) {
                 headline_class = "tl-headline tl-headline-title";
             }
+
             this._el.headline				= TL.Dom.create("h2", headline_class, this._el.content_container);
             if (TL.customOptions.sliderStyle && TL.customOptions.sliderStyle.titleStyle) {
                 this._el.headline.setAttribute('style', TL.customOptions.sliderStyle.titleStyle)
             }
             this._el.headline.innerHTML		= this.data.headline;
         }
-
         // Text
         if (this.data.text != "") {
             var text_content = "";
@@ -10225,11 +10228,10 @@ TL.SlideNav = TL.Class.extend({
 
         this._el.container = TL.Dom.create("div", "tl-slidenav-" + this.options.direction);
 
-
         if (TL.customOptions.sliderStyle && TL.customOptions.sliderStyle.navIcon) {
             const styleSheet = document.head.appendChild(document.createElement("style"));
             const navIcon = TL.customOptions.sliderStyle.navIcon[this.options.direction === 'previous' ? 0 : 1];
-            styleSheet.innerHTML = '.tl-slidenav-'+this.options.direction +' .tl-slidenav-icon:before {font-family: FontAwesome; content: "' + navIcon + '"!important; }';
+            styleSheet.innerHTML = '.tl-slidenav-'+ this.options.direction +' .tl-slidenav-icon:before {font-family: FontAwesome; content: "' + navIcon + '"!important; }';
         }
 
         if (TL.Browser.mobile) {
@@ -10311,6 +10313,7 @@ TL.SlideNav = TL.Class.extend({
         //     styleNavRight.innerHTML = '.tl-slidenav-next .tl-slidenav-icon:before {content: "' + navIconRight + '" !important;}';
         // }
         this._el.icon						= TL.Dom.create("div", "tl-slidenav-icon", this._el.content_container, "tl-slidenav-icon");
+        this._el.icon.id = this.options.direction;
         if (TL.customOptions.sliderStyle && TL.customOptions.sliderStyle.navStyle) {
             this._el.icon.setAttribute('style', TL.customOptions.sliderStyle.navStyle);
         }
@@ -10732,7 +10735,6 @@ TL.StorySlider = TL.Class.extend({
     /*	Init
 	================================================== */
     _initLayout: function () {
-// debugger;
         TL.DomUtil.addClass(this._el.container,
             TL.customOptions.className && TL.customOptions.className.sliderClass ?
                 TL.customOptions.className.sliderClass : 'tl-storyslider');
@@ -11834,7 +11836,10 @@ TL.TimeMarker = TL.Class.extend({
         if (this.data.unique_id) {
             this._el.container.id 		= this.data.unique_id + "-marker";
         }
-
+        //asd
+        // if (this.data.text.id) {
+        //     this._el.container.id 		= this.data.text.id;
+        // }
         if (this.data.end_date) {
             this.has_end_date = true;
             this._el.container.className = 'tl-timemarker tl-timemarker-with-end';
@@ -11883,6 +11888,11 @@ TL.TimeMarker = TL.Class.extend({
         // Text
         this._el.text					= TL.Dom.create("div", "tl-timemarker-text", this._el.content);
         this._text						= TL.Dom.create("h2", "tl-headline", this._el.text);
+        console.log("this.data.text.id", this.data.text.id)
+        if (this.data.text.id) {
+            this._text.id = this.data.text.id;
+        }
+        // this._text = this.data.id;
         if (this.data.text.headline && this.data.text.headline != "") {
             this._text.innerHTML		= TL.Util.unlinkify(this.data.text.headline);
         } else if (this.data.text.text && this.data.text.text != "") {
@@ -11904,7 +11914,6 @@ TL.TimeMarker = TL.Class.extend({
 
     // Update Display
     _updateDisplay: function(width, height, layout) {
-
         if (width) {
             this.options.width 					= width;
         }
@@ -12053,7 +12062,6 @@ TL.TimeEra = TL.Class.extend({
         this._el.content.className = "tl-timeera-content";
 
         // Handle number of lines visible vertically
-
         if (TL.Browser.webkit) {
             text_lines = Math.floor(h / (text_line_height + 2));
             if (text_lines < 1) {

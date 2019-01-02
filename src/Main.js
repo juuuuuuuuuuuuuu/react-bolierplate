@@ -1,6 +1,7 @@
 import React from "react";
 import 'timeline3/js/timeline';
 import examples from '../static/examples';
+import EventListener from 'react-event-listener';
 
 require('timeline3/css/timeline.css');
 let timeline;
@@ -15,6 +16,7 @@ class Main extends React.Component {
                 // zoom_sequence: 2, // 이 속성 사용시 확대,축소기능  불가능
                 marker_height_min: 50, // 아래 뜨는거 팝업 height 크기
                 // optimal_tick_width: 500,
+                timenav_position: 'top', //위아래 순서 바꾸기
             }
 
             const custom = {
@@ -61,14 +63,28 @@ class Main extends React.Component {
             }
 
             timeline = new TL.Timeline('timeline', examples, additionalOptions, custom);
-
             //첫번째 파라미터가 id값인거 같다. 전체 root를 잡는것
         }
     }
+
+    handleClick = (e) => {
+        if ( e.target.getAttribute('class') === 'tl-headline') {
+            console.log("e.target.id", e.target.id)
+        } else if (e.target.hasChildNodes() && e.target.querySelector('.tl-headline')){
+            console.log("e.target.id", e.target.querySelector('.tl-headline').id)
+        } else if (e.target.getAttribute('class') === 'tl-slidenav-icon') {
+            console.log("e.target.id", e.target.id)
+        } else if (e.target.hasChildNodes() && e.target.querySelector('.tl-slidenav-icon')) {
+            console.log("e.target.id", e.target.querySelector('.tl-slidenav-icon').id)
+        }
+    }
+
     render() {
         return (
             <div id={"timeline"} ref={"timeline"} style={{width: '100%', height: '600px'}}>
-                {timeline}
+                <EventListener target="window" onClick={this.handleClick}>
+                    {timeline}
+                </EventListener>
             </div>
         )
     }
