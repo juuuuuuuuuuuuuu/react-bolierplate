@@ -9,7 +9,7 @@ import Main from './Main';
 
 ReactDOM.render(
     <Main/>,
-    document.getElementById("timeline-embed")
+    document.getElementById("root")
 );
 
 

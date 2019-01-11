@@ -14,7 +14,9 @@
 /*!
 	TL
 */
+
 (function (root) {
+    debugger;
     TL = {
         // root.TL = {
         VERSION: '0.1',
@@ -2621,6 +2623,7 @@ TL.Events.fire = TL.Events.fireEvent;
 ================================================== */
 
 TL.Load = (function (doc) {
+    debugger;
     var loaded	= [];
 
     function isLoaded(url) {
@@ -2706,7 +2709,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 TL.LoadIt = (function (doc) {
     // -- Private Variables ------------------------------------------------------
-
+debugger;
     // User agent and feature test information.
     var env,
 

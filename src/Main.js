@@ -62,6 +62,7 @@ class Main extends React.Component {
 
             }
 
+            console.log("TL.Timeline", TL)
             timeline = new TL.Timeline('timeline', examples, additionalOptions, custom);
             //첫번째 파라미터가 id값인거 같다. 전체 root를 잡는것
         }
